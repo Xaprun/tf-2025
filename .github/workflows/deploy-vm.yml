@@ -18,10 +18,11 @@ jobs:
       ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
       TF_VAR_vm_admin_password: ${{ secrets.VM_ADMIN_PASSWORD }}
-      TF_VAR_client_id: ${{ vars.ARM_CLIENT_ID }}
-      TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
-      TF_VAR_tenant_id: ${{vars.ARM_TENANT_ID }}
-      TF_VAR_subscription_id: ${{ vars.ARM_SUBSCRIPTION_ID }}
+      # commented, as reference removed from provider settings in main.tf
+      # TF_VAR_client_id: ${{ vars.ARM_CLIENT_ID }}
+      # TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
+      # TF_VAR_tenant_id: ${{vars.ARM_TENANT_ID }}
+      # TF_VAR_subscription_id: ${{ vars.ARM_SUBSCRIPTION_ID }}
 
     steps:
       - name: Checkout code
