@@ -93,3 +93,64 @@ jobs:
 
       - name: Terraform Apply
         run: terraform apply -input=false -auto-approve tfplan
+
+  destroy:
+    name: Destroy Terraform Resources
+    runs-on: ubuntu-latest
+    needs: deploy  # ensures it runs after the deploy job
+    environment:
+      name: destroy  # environment with approval gate
+      url: https://portal.azure.com/  # optional: adds a button in UI
+
+    env:
+      ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+      TF_VAR_vm_admin_password: ${{ secrets.VM_ADMIN_PASSWORD }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Ensure Terraform backend storage exists
+        run: |
+          az login --service-principal \
+            --username "$ARM_CLIENT_ID" \
+            --password "$ARM_CLIENT_SECRET" \
+            --tenant "$ARM_TENANT_ID"
+
+          az account set --subscription "$ARM_SUBSCRIPTION_ID"
+
+          RG_NAME="rg-terraform-backend"
+          STORAGE_ACCOUNT="tfstatebackend123"
+          CONTAINER_NAME="tfstate"
+          LOCATION="westeurope"
+
+          az group create --name $RG_NAME --location $LOCATION
+          if ! az storage account show --name $STORAGE_ACCOUNT --resource-group $RG_NAME &> /dev/null; then
+            az storage account create \
+              --name $STORAGE_ACCOUNT \
+              --resource-group $RG_NAME \
+              --location $LOCATION \
+              --sku Standard_LRS \
+              --encryption-services blob
+          fi
+          STORAGE_KEY=$(az storage account keys list \
+            --account-name $STORAGE_ACCOUNT \
+            --resource-group $RG_NAME \
+            --query "[0].value" -o tsv)
+          az storage container create \
+            --name $CONTAINER_NAME \
+            --account-name $STORAGE_ACCOUNT \
+            --account-key $STORAGE_KEY
+
+      - name: Terraform Init (with backend)
+        run: terraform init
+
+      - name: Terraform Destroy
+        run: terraform destroy -auto-approve
+
