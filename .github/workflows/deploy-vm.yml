@@ -41,7 +41,7 @@ jobs:
           az account set --subscription "$ARM_SUBSCRIPTION_ID"
 
           RG_NAME="rg-terraform-backend"
-          STORAGE_ACCOUNT="tfstatebackend123"
+          STORAGE_ACCOUNT="tfstatebackendaj"
           CONTAINER_NAME="tfstate"
           LOCATION="westeurope"
 
