@@ -31,6 +31,45 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
 
+      - name: Ensure Terraform backend storage exists
+        run: |
+          az login --service-principal \
+            --username "$ARM_CLIENT_ID" \
+            --password "$ARM_CLIENT_SECRET" \
+            --tenant "$ARM_TENANT_ID"
+
+          az account set --subscription "$ARM_SUBSCRIPTION_ID"
+
+          RG_NAME="rg-terraform-backend"
+          STORAGE_ACCOUNT="tfstatebackend123"
+          CONTAINER_NAME="tfstate"
+          LOCATION="westeurope"
+
+          echo "✅ Checking or creating Resource Group..."
+          az group create --name $RG_NAME --location $LOCATION
+
+          echo "✅ Checking or creating Storage Account..."
+          if ! az storage account show --name $STORAGE_ACCOUNT --resource-group $RG_NAME &> /dev/null; then
+            az storage account create \
+              --name $STORAGE_ACCOUNT \
+              --resource-group $RG_NAME \
+              --location $LOCATION \
+              --sku Standard_LRS \
+              --encryption-services blob
+          fi
+
+          echo "✅ Checking or creating Blob Container..."
+          STORAGE_KEY=$(az storage account keys list \
+            --account-name $STORAGE_ACCOUNT \
+            --resource-group $RG_NAME \
+            --query "[0].value" -o tsv)
+
+          az storage container create \
+            --name $CONTAINER_NAME \
+            --account-name $STORAGE_ACCOUNT \
+            --account-key $STORAGE_KEY
+
+
       - name: Terraform Init
         run: terraform init
 
