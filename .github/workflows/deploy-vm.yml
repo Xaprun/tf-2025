@@ -19,14 +19,37 @@ jobs:
     - name: Terraform Init
       run: terraform init
 
-    - name: Terraform Plan
-      run: terraform plan -out=tfplan
-
-    - name: Terraform Apply
-      run: terraform apply -auto-approve tfplan
+    - name: Terraform Validate
+      run: terraform validate
       env:
         ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
         ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
         ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
         TF_VAR_vm_admin_password: ${{ secrets.VM_ADMIN_PASSWORD }}
+
+    - name: Terraform Format Check
+      run: terraform fmt -check -recursive
+
+
+    - name: Terraform Plan
+      run: terraform plan -input=false -out=tfplan
+      env:
+        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        TF_VAR_vm_admin_password: ${{ secrets.VM_ADMIN_PASSWORD }}
+
+    - name: Show Terraform Plan (preview)
+      run: terraform show -no-color tfplan
+
+    - name: Terraform Apply
+      run: terraform apply -input=false -auto-approve tfplan
+      env:
+        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        TF_VAR_vm_admin_password: ${{ secrets.VM_ADMIN_PASSWORD }}
+
