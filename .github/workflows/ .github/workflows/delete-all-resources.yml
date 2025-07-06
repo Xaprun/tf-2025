@@ -1,7 +1,7 @@
 name: Delete All Azure Resources
 
 on:
-  workflow_dispatch:  # Manual trigger only
+  workflow_dispatch:  # Manual trigger 
 
 jobs:
   destroy:
