@@ -41,8 +41,8 @@ jobs:
             exit 1
           fi
           pwd
-          ls env.ENV_DIR
-          ls env.ENV_DIR/dev
+          cd ${{ env.ENV_DIR }}
+          ls dev
 
 
       - name: Set up Terraform
