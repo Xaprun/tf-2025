@@ -22,7 +22,7 @@ jobs:
 
     env:
       ENV_NAME: ${{ github.event.inputs.env_name || 'dev' }}
-      ENV_DIR: env/${{ github.event.inputs.env_name }}
+      ENV_DIR: envs/${{ github.event.inputs.env_name }}
       ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
