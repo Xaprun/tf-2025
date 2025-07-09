@@ -62,3 +62,21 @@ resource "azurerm_resource_group" "rg" {
   name     = "${var.name}-rg"
   location = var.location
 }
+
+module "vnet" {
+  # source              = "../../modules/vnet/"
+  source git::https://github.com/xaprun/tfmodules.git//modules/vnet?ref=v1.0.
+  name                = var.name
+  location            = azurerm_resource_group.rg.location
+  address_space       = var.address_space
+  resource_group_name = azurerm_resource_group.rg.name
+
+  subnets = {
+    "dev-subnet-01" = {
+      address_prefix = "10.0.3.0/24"
+    }
+    "dev-subnet-02" = {
+      address_prefix = "10.0.4.0/24"
+    }
+  }
+}
