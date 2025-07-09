@@ -22,7 +22,7 @@ jobs:
 
     env:
       ENV_NAME: ${{ github.event.inputs.env_name || 'dev' }}
-      ENV_DIR: envs/${{ github.event.inputs.env_name }}
+      ENV_DIR: envs/${{ github.event.inputs.env_name || 'dev' }}
       ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
@@ -31,6 +31,11 @@ jobs:
 
       
     steps:
+      - name: Show selected environment
+        run: |
+          echo "ENV_NAME: $ENV_NAME"
+          echo "ENV_DIR: $ENV_DIR"
+
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -123,8 +128,8 @@ jobs:
       url: https://portal.azure.com/  # optional: adds a button in UI
 
     env:
-      ENV_NAME: ${{ github.event.inputs.env_name || 'dev' }} # to avoid issue with commit 
-      ENV_DIR: env/${{ github.event.inputs.env_name }}
+      ENV_NAME: ${{ github.event.inputs.env_name || 'dev' }}
+      ENV_DIR: envs/${{ github.event.inputs.env_name || 'dev' }}
       ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
