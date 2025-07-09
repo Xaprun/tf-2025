@@ -31,15 +31,15 @@ jobs:
 
       
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Validate environment directory exists
         run: |
           if [ ! -d "${{ env.ENV_DIR }}" ]; then
             echo "❌ Directory ${{ env.ENV_DIR }} does not exist."
             exit 1
           fi
-
-      - name: Checkout code
-        uses: actions/checkout@v3
 
 
       - name: Set up Terraform
