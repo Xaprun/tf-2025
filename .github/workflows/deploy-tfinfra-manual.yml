@@ -1,0 +1,159 @@
+name: Deploy Manually Azure infra with Terraform
+
+on:
+  workflow_dispatch:
+    inputs:
+      env_name:
+        description: "Terraform environment (dev or prod)"
+        required: true
+        default: dev
+        type: choice
+        options:
+          - dev
+          - prod
+      proceed:
+        description: "Set to true to proceed with deployment"
+        required: false
+        default: "false"
+
+jobs:
+  backend-init:
+    runs-on: ubuntu-latest
+    environment: dev
+
+    env:
+      ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+      TF_VAR_vm_admin_password: ${{ secrets.VM_ADMIN_PASSWORD }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Create Terraform backend infrastructure
+        working-directory: infra/bootstrap-backend
+        run: |
+          terraform init
+          terraform apply -auto-approve
+
+  deploy-infra:
+    needs: backend-init
+    runs-on: ubuntu-latest
+    environment: dev 
+
+    env:
+      ENV_NAME: ${{ github.event.inputs.env_name || 'dev' }}
+      ENV_DIR: envs/${{ github.event.inputs.env_name || 'dev' }}
+      ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+      TF_VAR_vm_admin_password: ${{ secrets.VM_ADMIN_PASSWORD }}
+
+      
+    steps:
+      - name: Show selected environment
+        run: |
+          echo "ENV_NAME: $ENV_NAME"
+          echo "ENV_DIR: $ENV_DIR"
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Validate environment directory exists
+        run: |
+          if [ ! -d "${{ env.ENV_DIR }}" ]; then
+            echo "❌ Directory ${{ env.ENV_DIR }} does not exist."
+            exit 1
+          fi
+          echo "✅ Directory ${{ env.ENV_DIR }} exists."
+          ls ${{ env.ENV_DIR }}
+
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ${{ env.ENV_DIR }}
+
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: ${{ env.ENV_DIR }}
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive || echo "::warning::Formatting issues detected"
+        working-directory: ${{ env.ENV_DIR }}
+
+      - name: Terraform Plan
+        run: terraform plan -input=false -out=tfplan
+        working-directory: ${{ env.ENV_DIR }}
+
+      - name: Upload Terraform Plan
+        uses: actions/upload-artifact@v4
+        with:
+            name: tfplan-${{ env.ENV_NAME }}
+            path: ${{ env.ENV_DIR }}/tfplan
+
+      - name: Show Terraform Plan (preview)
+        run: terraform show -no-color tfplan
+        working-directory: ${{ env.ENV_DIR }}
+
+      - name: Check deployment trigger and confirmation
+        run: |
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            echo "❌ Deployment aborted: must be manually triggered."
+            exit 1
+          fi
+
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "🔒 Deployment is manually triggered. Waiting for manual confirmation."
+            echo "Set 'proceed=true' input in dispatch to continue."
+
+            if [[ "${{ github.event.inputs.proceed }}" != "true" ]]; then
+              echo "❌ Deployment not approved. Exiting."
+              exit 1
+            fi
+          fi
+
+      - name: Terraform Apply
+        run: terraform apply -input=false -auto-approve tfplan
+        working-directory: ${{ env.ENV_DIR }}
+
+  destroy:
+    name: Destroy Terraform Resources
+    runs-on: ubuntu-latest
+    needs: deploy-infra  # ensures it runs after the deploy job
+    environment:
+      name: destroy  # environment with approval gate
+      url: https://portal.azure.com/  # optional: adds a button in UI
+
+    env:
+      ENV_NAME: ${{ github.event.inputs.env_name || 'dev' }}
+      ENV_DIR: envs/${{ github.event.inputs.env_name || 'dev' }}
+      ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+      TF_VAR_vm_admin_password: ${{ secrets.VM_ADMIN_PASSWORD }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init (with backend)
+        working-directory: ${{ env.ENV_DIR }}
+        run: terraform init
+
+      - name: Terraform Destroy
+        working-directory: ${{ env.ENV_DIR }}
+        run: terraform destroy -auto-approve
+
