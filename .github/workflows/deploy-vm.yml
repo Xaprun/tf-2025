@@ -5,7 +5,15 @@ on:
     branches:
       main
   workflow_dispatch:
-
+    inputs:
+      env_name:
+        description: "Terraform environment (dev or prod)"
+        required: true
+        default: dev
+        type: choice
+        options:
+          - dev
+          - prod
 
 jobs:
   deploy:
@@ -13,25 +21,33 @@ jobs:
     environment: dev 
 
     env:
+      ENV_NAME: ${{ github.event.inputs.env_name || 'dev' }}
+      ENV_DIR: env/${{ github.event.inputs.env_name }}
       ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
       TF_VAR_vm_admin_password: ${{ secrets.VM_ADMIN_PASSWORD }}
-      # commented, as reference removed from provider settings in main.tf
-      # TF_VAR_client_id: ${{ vars.ARM_CLIENT_ID }}
-      # TF_VAR_client_secret: ${{ secrets.ARM_CLIENT_SECRET }}
-      # TF_VAR_tenant_id: ${{vars.ARM_TENANT_ID }}
-      # TF_VAR_subscription_id: ${{ vars.ARM_SUBSCRIPTION_ID }}
 
+      
     steps:
+      - name: Validate environment directory exists
+        run: |
+          if [ ! -d "${{ env.ENV_DIR }}" ]; then
+            echo "❌ Directory ${{ env.ENV_DIR }} does not exist."
+            exit 1
+          fi
+
       - name: Checkout code
         uses: actions/checkout@v3
+
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
 
+
       - name: Ensure Terraform backend storage exists
+        working-directory: ${{ env.ENV_DIR }}
         run: |
           az login --service-principal \
             --username "$ARM_CLIENT_ID" \
@@ -72,27 +88,28 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+        working-directory: ${{ env.ENV_DIR }}
 
       - name: Terraform Validate
         run: terraform validate
+        working-directory: ${{ env.ENV_DIR }}
 
       - name: Terraform Format Check
         run: terraform fmt -check -recursive || echo "::warning::Formatting issues detected"
+        working-directory: ${{ env.ENV_DIR }}
 
       - name: Terraform Plan
         run: terraform plan -input=false -out=tfplan
-        # env:
-        #   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-        #   ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-        #   ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-        #   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        working-directory: ${{ env.ENV_DIR }}
 
 
       - name: Show Terraform Plan (preview)
         run: terraform show -no-color tfplan
+        working-directory: ${{ env.ENV_DIR }}
 
       - name: Terraform Apply
         run: terraform apply -input=false -auto-approve tfplan
+        working-directory: ${{ env.ENV_DIR }}
 
   destroy:
     name: Destroy Terraform Resources
@@ -103,6 +120,8 @@ jobs:
       url: https://portal.azure.com/  # optional: adds a button in UI
 
     env:
+      ENV_NAME: ${{ github.event.inputs.env_name || 'dev' }} # to avoid issue with commit 
+      ENV_DIR: env/${{ github.event.inputs.env_name }}
       ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
@@ -117,6 +136,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Ensure Terraform backend storage exists
+        working-directory: ${{ env.ENV_DIR }}
         run: |
           az login --service-principal \
             --username "$ARM_CLIENT_ID" \
@@ -149,8 +169,10 @@ jobs:
             --account-key $STORAGE_KEY
 
       - name: Terraform Init (with backend)
+        working-directory: ${{ env.ENV_DIR }}
         run: terraform init
 
       - name: Terraform Destroy
+        working-directory: ${{ env.ENV_DIR }}
         run: terraform destroy -auto-approve
 

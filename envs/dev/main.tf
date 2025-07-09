@@ -1,13 +1,3 @@
-provider "azurerm" {
-  features {}
-
-  # If uncomment, then TF_VAR_* variables set required
-  # client_id       = var.client_id
-  # client_secret   = var.client_secret
-  # tenant_id       = var.tenant_id
-  # subscription_id = var.subscription_id
-}
-
 
 resource "azurerm_resource_group" "example" {
   name     = "rg-vm-tf-test"
@@ -62,4 +52,13 @@ resource "azurerm_windows_virtual_machine" "example" {
     sku       = "2019-Datacenter"
     version   = "latest"
   }
+}
+
+
+###############################
+######## TFMAESTRO VRS ########
+###############################
+resource "azurerm_resource_group" "rg" {
+  name     = "${var.name}-rg"
+  location = var.location
 }
