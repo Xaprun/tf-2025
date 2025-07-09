@@ -45,9 +45,8 @@ jobs:
             echo "❌ Directory ${{ env.ENV_DIR }} does not exist."
             exit 1
           fi
-          pwd
-          cd ${{ env.ENV_DIR }}
-          ls dev
+          echo "✅ Directory ${{ env.ENV_DIR }} exists."
+          ls ${{ env.ENV_DIR }}
 
 
       - name: Set up Terraform
