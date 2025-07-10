@@ -35,6 +35,14 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
 
+      - name: Azure CLI login
+        run: |
+          az login --service-principal \
+            --username "${{ env.ARM_CLIENT_ID }}" \
+            --password "${{ env.ARM_CLIENT_SECRET }}" \
+            --tenant "${{ env.ARM_TENANT_ID }}" \
+            --output none
+
       - name: Check if backend resource group exists
         id: rg_check
         run: |
