@@ -35,10 +35,26 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
 
-      - name: Create Terraform backend infrastructure
+      - name: Init Terraform backend infrastructure
         working-directory: infra/bootstrap-backend
         run: |
           terraform init
+
+      - name: Check backend storage deployment trigger and confirmation
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "🔒 Deployment is manually triggered. Waiting for manual confirmation."
+            echo "Set 'proceed=true' input in dispatch to continue."
+
+            if [[ "${{ github.event.inputs.proceed }}" != "true" ]]; then
+              echo "❌ Deployment not approved. Exiting."
+              exit 1
+            fi
+          fi
+
+      - name: Create Terraform backend infrastructure
+        working-directory: infra/bootstrap-backend
+        run: |
           terraform apply -auto-approve
 
   deploy-infra:
