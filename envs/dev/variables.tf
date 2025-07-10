@@ -31,3 +31,10 @@ variable "backend_resource_group_name" {
   description = "Name of backend rg"
   type        = string
 }
+
+variable "subnets" {
+  description = "Map of private subnets configuration"
+  type        = map(object({
+    address_prefix = string
+  }))
+}
