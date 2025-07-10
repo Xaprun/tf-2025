@@ -26,7 +26,6 @@ variable "environment" {
   description = "Environment for the resources"
   type        = string
 }
-var.backend_resource_group_name
 
 variable "backend_resource_group_name" {
   description = "Name of backend rg"
