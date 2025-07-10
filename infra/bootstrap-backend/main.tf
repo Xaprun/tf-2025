@@ -14,7 +14,7 @@ provider "azurerm" {
 }
 
 module "terraform_state_bucket" {
-  source              = "git::https://github.com/xaprun/tfmodules.git//modules/vnet?ref=tfstatebucket-v1.0.0"
+  source              = "git::https://github.com/xaprun/tfmodules.git//modules/terraform_state_bucket?ref=terraform_state_bucket-v1.0.0"
 
   environment         = "dev"
   resource_group_name = "tf-backend-rg"
