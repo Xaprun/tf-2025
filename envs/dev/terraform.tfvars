@@ -14,3 +14,6 @@ subnets = {
     address_prefix = "10.0.3.0/24"
   }
 }
+
+resource_group_location = "westeurope"
+network_name            = "dev-vnet"
