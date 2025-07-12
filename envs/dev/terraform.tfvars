@@ -1,3 +1,4 @@
+neme  = "aj"
 network_name     = "dev"
 location = "westeurope"
 environment = "dev"
