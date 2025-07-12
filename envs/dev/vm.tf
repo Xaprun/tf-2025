@@ -18,7 +18,7 @@ module "vm" {
       machine_description = "Test VM 1"
     }
   }
-  
+  firewall_rules = {}
 }
 
 
