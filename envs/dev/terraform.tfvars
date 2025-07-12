@@ -1,4 +1,4 @@
-name     = "dev"
+network_name     = "dev"
 location = "westeurope"
 environment = "dev"
 address_space = ["10.0.0.0/16"]
@@ -16,4 +16,4 @@ subnets = {
 }
 
 resource_group_location = "westeurope"
-network_name            = "dev-vnet"
+public_subnet_name      = "subnet-public"
