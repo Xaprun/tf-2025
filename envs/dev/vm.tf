@@ -5,7 +5,7 @@ module "vm" {
   resource_group_location = azurerm_resource_group.main.location
   network_name            = var.location
   environment             = var.environment
-  network_name            = var.network_name
+  # network_name            = var.network_name
   admin_username          = "azureuser"
   admin_ssh_key_path      = "ssh/admin_key.pub"
   # custom_data_file        = "cloud-init/init.sh"
