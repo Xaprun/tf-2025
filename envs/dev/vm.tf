@@ -5,6 +5,7 @@ module "vm" {
   resource_group_location = var.location
   environment             = var.environment
   network_name            = var.network_name
+  subnet_id = module.vnet.subnet_ids["subnet-public"]
   admin_username          = "azureuser"
   public_subnet_name      = var.public_subnet_name
   admin_ssh_key_path      = "ssh/admin_key.pub"
