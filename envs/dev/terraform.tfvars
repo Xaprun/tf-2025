@@ -1,4 +1,4 @@
-name  = "aj"
+name  = "dev"
 network_name     = "dev"
 location = "westeurope"
 environment = "dev"
@@ -16,5 +16,5 @@ subnets = {
   }
 }
 
-resource_group_location = "westeurope"
+# resource_group_location = "westeurope"
 public_subnet_name      = "subnet-public"
