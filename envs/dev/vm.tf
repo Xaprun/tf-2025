@@ -2,10 +2,9 @@ module "vm" {
   source = "git::https://github.com/Xaprun/tfmodules.git//modules/vm?ref=main"
 
   resource_group_name     = "${var.environment}-rg"
-  resource_group_location = azurerm_resource_group.main.location
-  network_name            = var.location
+  resource_group_location = var.location
   environment             = var.environment
-  # network_name          = var.network_name
+  network_name            = var.network_name
   admin_username          = "azureuser"
   public_subnet_name      = var.public_subnet_name
   admin_ssh_key_path      = "ssh/admin_key.pub"
