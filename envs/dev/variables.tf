@@ -2,12 +2,15 @@ variable "public_subnet_name" {
   description = "The name of public subnet used in data"
   type        = string
 }
-
+variable "network_name" {
+  description = "Name of the virtual network"
+  type        = string
+}
 ###############################
 ######## TFMAESTRO VRS ########
 ###############################
-variable "network_name" {
-  description = "Name of the virtual network"
+variable "name" {
+  description = "Name of the setup or client"
   type        = string
 }
 
