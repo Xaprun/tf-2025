@@ -8,7 +8,7 @@ module "vm" {
   network_name            = var.network_name
   admin_username          = "azureuser"
   admin_ssh_key_path      = "ssh/admin_key.pub"
-  custom_data_file        = "cloud-init/init.sh"
+  # custom_data_file        = "cloud-init/init.sh"
 
   vm_config = {
     "vm1" = {
