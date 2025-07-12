@@ -6,7 +6,7 @@ variable "public_subnet_name" {
 ###############################
 ######## TFMAESTRO VRS ########
 ###############################
-variable "name" {
+variable "network_name" {
   description = "Name of the virtual network"
   type        = string
 }
