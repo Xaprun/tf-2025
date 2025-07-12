@@ -1,8 +1,8 @@
-variable "vm_admin_password" {
-  description = "Admin password for the VM"
+variable "public_subnet_name" {
+  description = "The name of public subnet used in data"
   type        = string
-  sensitive   = true
 }
+
 ###############################
 ######## TFMAESTRO VRS ########
 ###############################
@@ -38,3 +38,5 @@ variable "subnets" {
     address_prefix = string
   }))
 }
+
+
