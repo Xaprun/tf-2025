@@ -1,3 +1,8 @@
+variable "subnet_id" {
+  description = "ID of the subnet to attach NICs to"
+  type        = string
+}
+
 variable "public_subnet_name" {
   description = "The name of public subnet used in data"
   type        = string
@@ -6,6 +11,7 @@ variable "network_name" {
   description = "Name of the virtual network"
   type        = string
 }
+
 ###############################
 ######## TFMAESTRO VRS ########
 ###############################
