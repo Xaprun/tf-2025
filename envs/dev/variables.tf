@@ -1,7 +1,7 @@
-variable "subnet_id" {
-  description = "ID of the subnet to attach NICs to"
-  type        = string
-}
+# variable "subnet_id" {
+#  description = "ID of the subnet to attach NICs to"
+#  type        = string
+#}
 
 variable "public_subnet_name" {
   description = "The name of public subnet used in data"
