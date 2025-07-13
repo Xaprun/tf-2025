@@ -23,11 +23,14 @@ module "vm" {
   resource_group_location = var.location
   environment             = var.environment
   network_name            = var.network_name
-  subnet_id = module.vnet.subnet_ids["subnet-public"]
+
+
   admin_username          = "azureuser"
   public_subnet_name      = var.public_subnet_name
   admin_ssh_key_path      = "ssh/admin_key.pub"
-  # custom_data_file        = "cloud-init/init.sh"
+  # custom_data_file      = "cloud-init/init.sh"
+  subnet_id               = module.vnet.subnet_ids["subnet-public"]
+  depends_on              = [azurerm_resource_group.rg, module.vnet]
 
   vm_config = {
     "vm1" = {
