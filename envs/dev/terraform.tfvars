@@ -11,4 +11,4 @@ subnets = {
 }
 
 # resource_group_location = "westeurope"
-public_subnet_name      = "subnet-public"
+# public_subnet_name      = "subnet-public"
