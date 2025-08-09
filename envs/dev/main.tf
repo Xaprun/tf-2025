@@ -40,5 +40,18 @@ module "vm" {
       machine_description = "Test VM 1"
     }
   }
-  firewall_rules = {}
+  firewall_rules = {
+      Allow-SSH = {
+        direction                  = "Inbound"
+        access                     = "Allow"
+        protocol                   = "Tcp"
+        source_port_range          = "*"
+        destination_port_range     = "22"
+        # source_address_prefix      = var.admin_source_cidr
+        source_address_prefix      = "*"
+        destination_address_prefix = "*"
+        priority                   = 100
+    }
+  }
+
 }
