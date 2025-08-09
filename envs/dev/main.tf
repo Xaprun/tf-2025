@@ -30,7 +30,8 @@ module "vm" {
   admin_username          = "azureuser"
   public_subnet_name      = keys(var.subnets)[0]
   admin_ssh_key_path      = "ssh/admin_key.pub"
-  custom_data_file        = "${path.root}/cloud-init/init.sh"
+  custom_data_file        = "cloud-init/init.sh"
+  # custom_data_file        = "${path.root}/cloud-init/init.sh"
   # custom_data_file        = "${path.module}/cloud-init/init.sh"
   # custom_data_b64 = filebase64("${path.module}/cloud-init/init.sh")
   subnet_id               = module.vnet-rg01-01.subnet_ids["subnet-06"]
