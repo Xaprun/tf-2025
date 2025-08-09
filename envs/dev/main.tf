@@ -30,7 +30,7 @@ module "vm" {
   admin_ssh_key_path      = "ssh/admin_key.pub"
   # custom_data_file      = "cloud-init/init.sh"
   subnet_id               = module.vnet.subnet_ids["subnet-06"]
-  depends_on              = [azurerm_resource_group.rg01, module.vnet]
+  depends_on              = [azurerm_resource_group.rg01, module.vnet-rg01-01]
 
   vm_config = {
     "${var.name}-${var.location}-vm1" = {
