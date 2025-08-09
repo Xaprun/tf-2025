@@ -16,7 +16,9 @@ module "vnet-rg01-01" {
   subnets               = var.subnets
 }
 
-################################
+###############################
+########### VM DEBIAN #########
+###############################
 module "vm" {
   source = "git::https://github.com/Xaprun/tfmodules.git//modules/vm?ref=main"
 
@@ -45,8 +47,9 @@ module "vm" {
   }
 
 }
-##################
-##################
+###############################
+######### SUBNET NSG ##########
+###############################
 # Allow SSH only from your IP/CIDR (replace!)
 variable "admin_source_cidr" {
   type        = string
