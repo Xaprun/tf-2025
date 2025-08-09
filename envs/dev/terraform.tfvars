@@ -9,6 +9,9 @@ subnets = {
   "subnet-05" = {
     address_prefix = "10.0.5.0/24"
   }
+  "subnet-06" = {
+    address_prefix = "10.0.6.0/24"
+  }
 }
 
 # resource_group_location = "westeurope"
