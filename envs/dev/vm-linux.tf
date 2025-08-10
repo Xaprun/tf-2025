@@ -8,7 +8,7 @@ module "vm-lin-01" {
   resource_group_name     = azurerm_resource_group.rg-01.name
   resource_group_location = var.location
   # environment           = var.environment
-  network_name            = var.network_name
+  network_name            = "${local.prefix}-vnet"
 
   admin_username          = "azureuser"
   public_subnet_name      = keys(var.subnets)[1]
@@ -45,7 +45,7 @@ module "vm-lin-02" {
   resource_group_name     = azurerm_resource_group.rg-01.name
   resource_group_location = var.location
   # environment           = var.environment
-  network_name            = var.network_name
+  network_name            = = "${local.prefix}-vnet"
 
   admin_username          = "azureuser"
   public_subnet_name      = keys(var.subnets)[2]
