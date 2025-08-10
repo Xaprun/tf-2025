@@ -55,7 +55,7 @@ module "vm-lin-02" {
   depends_on              = [azurerm_resource_group.rg-01, module.vnet-01]
 
   vm_config = {
-    "${var.prefix}-vm-li02" = {
+    "${local.prefix}-vm-li02" = {
       # private_ip          = "10.0.6.10"
       public_ip_name      = "vm-li02-public-ip"
       machine_type        = "Standard_B1ms"
