@@ -1,10 +1,7 @@
 ###############################
 ###### VARs DEFINITIONS #######
 ###############################
-variable "prefix" {
-description = "Used as prefix in resource naming convention"
-type        = string
-}
+
 variable "network_name" {
   description = "Name of the virtual network"
   type        = string
