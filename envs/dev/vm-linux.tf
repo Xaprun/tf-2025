@@ -2,13 +2,13 @@
 ###############################
 ########### VM DEBIAN #########
 ###############################
-module "vm-li-01" {
+module "vm-lin-01" {
   source = "git::https://github.com/Xaprun/tfmodules.git//modules/vm?ref=main"
 
   resource_group_name     = azurerm_resource_group.rg-01.name
   resource_group_location = var.location
-  # environment             = var.environment
-  # network_name            = "${var.name}-${var.location}-${var.network_name}"
+  # environment           = var.environment
+  network_name            = var.network_name
 
   admin_username          = "azureuser"
   public_subnet_name      = keys(var.subnets)[1]
@@ -17,7 +17,7 @@ module "vm-li-01" {
   # custom_data_file      = "${path.root}/cloud-init/init.sh"
   # custom_data_file      = "${path.module}/cloud-init/init.sh"
   # custom_data_b64       = filebase64("${path.module}/cloud-init/init.sh")
-  subnet_id               = module.vnet-01.subnet_ids["subnet-06"]
+  subnet_id               = module.vnet-01.subnet_ids["subnet-lin"]
   depends_on              = [azurerm_resource_group.rg-01, module.vnet-01]
 
   vm_config = {
@@ -39,13 +39,13 @@ resource "azurerm_subnet_network_security_group_association" "subnet-lin" {
 }
 #########################
 
-module "vm-li-02" {
+module "vm-lin-02" {
   source = "git::https://github.com/Xaprun/tfmodules.git//modules/vm?ref=main"
 
   resource_group_name     = azurerm_resource_group.rg-01.name
   resource_group_location = var.location
-  # environment             = var.environment
-  # network_name            = "${var.name}-${var.location}-${var.network_name}"
+  # environment           = var.environment
+  network_name            = var.network_name
 
   admin_username          = "azureuser"
   public_subnet_name      = keys(var.subnets)[2]
