@@ -19,7 +19,7 @@ resource "azurerm_resource_group" "rg-01" {
 
 module "vnet-01" {
   source                = "git::https://github.com/xaprun/tfmodules.git//modules/vnet?ref=vnet-v1.0.1"
-  name                  = var.network_name
+  name                  = "${local.prefix}-vnet-01"
   location              = var.location
   address_space         = var.address_space
   resource_group_name   = azurerm_resource_group.rg-01.name
