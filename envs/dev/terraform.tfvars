@@ -13,7 +13,7 @@ name           = "p01"
 location       = "westeurope"
 location_short = "we"
 environment    = "dev"
-prefix         = "${var.name}-${var.environment}-${var.location_short}"
+# prefix         = "${var.name}-${var.environment}-${var.location_short}"
 
 # NETWORK CONFIG:
 network_name  = "${var.prefix}-vnet"
