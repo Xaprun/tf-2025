@@ -1,20 +1,15 @@
-# variable "subnet_id" {
-#  description = "ID of the subnet to attach NICs to"
-#  type        = string
-#}
-
-# variable "public_subnet_name" {
-# description = "The name of public subnet used in data"
-#  type        = string
-# }
+###############################
+######## TFMAESTRO VRS ########
+###############################
+variable "prefix" {
+description = "Used as prefix in resource naming convention"
+type        = string
+}
 variable "network_name" {
   description = "Name of the virtual network"
   type        = string
 }
 
-###############################
-######## TFMAESTRO VRS ########
-###############################
 variable "name" {
   description = "Name of the setup or client"
   type        = string
