@@ -9,7 +9,7 @@ locals {
 ###############################
 
 resource "azurerm_resource_group" "rg-01" {
-  name     = "${locals.prefix}-rg"
+  name     = "${local.prefix}-rg"
   location = var.location
 }
 
@@ -31,7 +31,7 @@ module "vnet-01" {
 ###############################
 
 resource "azurerm_network_security_group" "ssh" {
-  name                = "${locals.prefix}-lin-ssh-nsg"
+  name                = "${local.prefix}-lin-ssh-nsg"
   location            = azurerm_resource_group.rg-01.location
   resource_group_name = azurerm_resource_group.rg-01.name
 
