@@ -1,5 +1,5 @@
 ###############################
-######## TFMAESTRO VRS ########
+###### VARs DEFINITIONS #######
 ###############################
 variable "prefix" {
 description = "Used as prefix in resource naming convention"
@@ -49,4 +49,10 @@ variable "subnets" {
   }))
 }
 
+# Allow SSH only from your IP/CIDR (replace!)
+variable "admin_source_cidr" {
+  type        = string
+  description = "CIDR allowed to SSH (e.g., 1.2.3.4/32)"
+  default = "*"
+}
 
