@@ -29,3 +29,6 @@ subnets = {
     address_prefix = "10.0.21.0/24"
   }
 }
+
+prv_ip_lin     = "10.0.20.10"
+prv_ip_lin_prv = "10.0.21.10"
