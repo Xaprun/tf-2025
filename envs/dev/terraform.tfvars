@@ -16,7 +16,7 @@ environment    = "dev"
 # prefix         = "${var.name}-${var.environment}-${var.location_short}"
 
 # NETWORK CONFIG:
-network_name  = "${var.prefix}-vnet"
+
 address_space = ["10.0.0.0/16"]
 subnets = {
   "subnet-win" = {
