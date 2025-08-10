@@ -1,16 +1,22 @@
 ###############################
+######## LOCAL VARS ###########
+###############################
+locals {
+  prefix = "${var.name}-${var.environment}-${var.location_short}"
+}
+###############################
 ############# RGs #############
 ###############################
 
 resource "azurerm_resource_group" "rg-01" {
-  name     = "${var.prefix}-rg"
+  name     = "${locals.prefix}-rg"
   location = var.location
 }
 
 ###############################
 ########### VNETS #############
 ###############################
-prefix         = "${var.name}-${var.environment}-${var.location_short}"
+
 module "vnet-01" {
   source                = "git::https://github.com/xaprun/tfmodules.git//modules/vnet?ref=vnet-v1.0.1"
   name                  = var.network_name
@@ -25,7 +31,7 @@ module "vnet-01" {
 ###############################
 
 resource "azurerm_network_security_group" "ssh" {
-  name                = "${var.prefix}-lin-ssh-nsg"
+  name                = "${locals.prefix}-lin-ssh-nsg"
   location            = azurerm_resource_group.rg-01.location
   resource_group_name = azurerm_resource_group.rg-01.name
 
