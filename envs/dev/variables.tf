@@ -26,7 +26,7 @@ variable "location" {
   default     = "westeurope"
 }
 
-variable "location-short" {
+variable "location_short" {
   description = "Shortcat of location"
   type        = string
   default     = "we"
