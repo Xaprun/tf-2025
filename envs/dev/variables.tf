@@ -2,10 +2,6 @@
 ###### VARs DEFINITIONS #######
 ###############################
 
-variable "network_name" {
-  description = "Name of the virtual network"
-  type        = string
-}
 
 variable "name" {
   description = "Name of the setup or client"
