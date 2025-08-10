@@ -25,6 +25,9 @@ subnets = {
   "subnet-lin" = {
     address_prefix = "10.0.20.0/24"
   }
+  "subnet-lin-prv" = {
+    address_prefix = "10.0.21.0/24"
+  }
 }
 
 ###############################
