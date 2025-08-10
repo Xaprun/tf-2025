@@ -26,6 +26,12 @@ variable "location" {
   default     = "westeurope"
 }
 
+variable "location-short" {
+  description = "Shortcat of location"
+  type        = string
+  default     = "we"
+}
+
 variable "environment" {
   description = "Environment for the resources"
   type        = string
