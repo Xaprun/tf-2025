@@ -22,7 +22,7 @@ module "vm-lin-01" {
 
   vm_config = {
     "${local.prefix}-vm-li01" = {
-      # private_ip          = "10.0.6.10"
+      private_ip          = prv_ip_lin_prv
       public_ip_name      = "vm-li01-public-ip"
       machine_type        = "Standard_B1ms"
       machine_description = "Test VM 1"
@@ -56,7 +56,7 @@ module "vm-lin-02" {
 
   vm_config = {
     "${local.prefix}-vm-li02" = {
-      # private_ip          = "10.0.6.10"
+      private_ip          = var.prv_ip_lin_prv
       public_ip_name      = "vm-li02-public-ip"
       machine_type        = "Standard_B1ms"
       machine_description = "Test VM 2"
