@@ -52,4 +52,31 @@ module "vnet-01" {
   subnets               = var.subnets
 }
 
+###############################
+######### SUBNET NSG ##########
+###############################
+# Allow SSH only from your IP/CIDR (replace!)
+variable "admin_source_cidr" {
+  type        = string
+  description = "CIDR allowed to SSH (e.g., 1.2.3.4/32)"
+  default = "*"
+}
+
+resource "azurerm_network_security_group" "ssh" {
+  name                = "${var.prefix}-lin-ssh-nsg"
+  location            = azurerm_resource_group.rg-01.location
+  resource_group_name = azurerm_resource_group.rg-01.name
+
+  security_rule {
+    name                       = "Allow-SSH"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = var.admin_source_cidr  # e.g. "1.2.3.4/32"
+    destination_address_prefix = "*"
+  }
+}
 
