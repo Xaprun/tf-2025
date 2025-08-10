@@ -42,13 +42,6 @@ variable "subnets" {
   }))
 }
 
-variable "prv_ips" {
-  description = "Map of private ips for vms"
-  type        = map(object({
-    prv_ip = string
-  }))
-}
-
 # Allow SSH only from your IP/CIDR (replace!)
 variable "admin_source_cidr" {
   type        = string
@@ -56,3 +49,11 @@ variable "admin_source_cidr" {
   default = "*"
 }
 
+variable "prv_ip_lin" {
+  description = "Private IP for VM"
+  type        = string
+}
+variable "prv_ip_lin_prv" {
+  description = "Private IP for VM"
+  type        = string
+}
