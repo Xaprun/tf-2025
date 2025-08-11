@@ -8,7 +8,7 @@ module "vm_lin_01" {
   network_name            = "${local.prefix}-vnet"
   resource_group_name     = azurerm_resource_group.rg-01.name
   resource_group_location = var.location
-  subnet_id               = module.vnet_01.subnet_ids["subnet-lin"]
+  subnet_id               = module.vnet-01.subnet_ids["subnet-lin"]
   admin_username          = "azureuser"
   admin_ssh_key_path      = "ssh/admin_key.pub"
   custom_data_file        = "cloud-init/init.sh"
