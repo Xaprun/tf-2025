@@ -32,7 +32,7 @@ module "vm_lin_02" {
   network_name            = "${local.prefix}-vnet"
   resource_group_name     = azurerm_resource_group.rg-01.name
   resource_group_location = var.location
-  subnet_id               = module.vnet_01.subnet_ids["subnet-lin-prv"]
+  subnet_id               = module.vnet-01.subnet_ids["subnet-lin-prv"]
   admin_username          = "azureuser"
   admin_ssh_key_path      = "ssh/admin_key.pub"
   # no custom_data, no public IP
