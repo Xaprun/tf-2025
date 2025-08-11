@@ -6,7 +6,7 @@ module "vm_lin_01" {
   source                  = "git::https://github.com/Xaprun/tfmodules.git//modules/vm?ref=main"
   environment             = var.environment
   network_name            = "${local.prefix}-vnet"
-  resource_group_name     = azurerm_resource_group.rg_01.name
+  resource_group_name     = azurerm_resource_group.rg-01.name
   resource_group_location = var.location
   subnet_id               = module.vnet_01.subnet_ids["subnet-lin"]
   admin_username          = "azureuser"
@@ -30,7 +30,7 @@ module "vm_lin_02" {
   source                  = "git::https://github.com/Xaprun/tfmodules.git//modules/vm?ref=main"
   environment             = var.environment
   network_name            = "${local.prefix}-vnet"
-  resource_group_name     = azurerm_resource_group.rg_01.name
+  resource_group_name     = azurerm_resource_group.rg-01.name
   resource_group_location = var.location
   subnet_id               = module.vnet_01.subnet_ids["subnet-lin-prv"]
   admin_username          = "azureuser"
