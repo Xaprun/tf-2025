@@ -3,11 +3,6 @@
 ###############################
 locals {
   prefix = "${var.name}-${var.environment}-${var.location_short}"
-  public_ip_vms = {
-    for k, v in var.vm_config :
-    k => v
-    if lookup(v, "assign_public_ip", var.enable_public_ip)
-  }
 }
 
 ###############################
