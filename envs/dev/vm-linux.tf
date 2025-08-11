@@ -13,7 +13,7 @@ module "vm-lin-01" {
   admin_username          = "azureuser"
   public_subnet_name      = keys(var.subnets)[1]
   admin_ssh_key_path      = "ssh/admin_key.pub"
-  custom_data_file      = "$cloud-init/init.sh"
+  custom_data_file      = "cloud-init/init.sh"
   # custom_data_file      = "${path.module}/cloud-init/init.sh"
   # custom_data_file         = filebase64("cloud-init/init.sh")
   subnet_id               = module.vnet-01.subnet_ids["subnet-lin"]
